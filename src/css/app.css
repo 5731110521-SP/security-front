@@ -1,0 +1,294 @@
+@import "https://use.fontawesome.com/releases/v5.3.1/css/all.css";
+@import "https://fonts.googleapis.com/css?family=K2D";
+
+html,
+body {
+  margin: 0;
+  font-family: "K2D", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#navbar {
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  background-color: #1c2c83;
+  z-index: 10;
+}
+
+#navbar #left {
+  width: auto;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  padding-left: 30px;
+  color: white;
+  font-size: 25px;
+}
+
+#navbar #left object {
+  margin-right: 15px;
+}
+
+#navbar #right {
+  margin-right: 20px;
+  width: auto;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  color: white;
+  font-size: 15px;
+}
+
+#navbar #right * {
+  margin: 30px;
+  font-size: 18px;
+}
+
+#navbar #right i {
+  font-size: 30px;
+}
+
+#navbar #right button {
+  all: unset;
+  box-sizing: border-box;
+  color: white;
+  border: 3px solid white;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100px;
+}
+
+#navbar #right button i {
+  font-size: 20px;
+  margin: 0;
+}
+
+.page {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: 80px auto;
+  grid-template-areas:
+    ". ."
+    ". header"
+    ". content";
+}
+
+.page header {
+  padding: 20px;
+  grid-area: header;
+  display: grid;
+  grid-template-columns: 40% 20% auto 20%;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "contentheader contentHeader . addButton"
+    "left_input left_input right_input right_input";
+}
+
+.page header .left_input,
+.page header .right_input {
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.page header .contentHeader {
+  padding: 10px 10px 10px 0px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: start;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "mainHeader"
+    "description";
+}
+
+.page header .contentHeader .mainHeader {
+  grid-area: mainHeader;
+  font-size: 30px;
+  font-weight: bold;
+  color: #171463
+}
+
+.page header .contentHeader .description {
+  grid-area: description;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.page header a {
+  margin: 10px 10px 0px 10px;
+  text-align: start;
+
+}
+
+.page header .left_input {
+  grid-area: left_input;
+  height: 40px;
+  border-right: none;
+  padding-left: 0px;
+  padding-right: 0px;
+
+}
+
+.page header .right_input {
+  grid-area: right_input;
+  height: 40px;
+  width: 100%;
+  font-size: 15px;
+  margin: auto;
+  margin-left: 0px;
+  border: #0000001f solid 1px;
+  border-radius: 5px;
+}
+
+.page header .addButton {
+  height: 40px;
+  grid-area: addButton;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+
+  font-family: "Montserrat", sans-serif;
+  width: auto;
+  height: 44px;
+  background: #1c2c83;
+  color: #ffffff;
+  margin: 10px;
+  margin-right: 0px;
+  cursor: pointer;
+  border-radius: 2px;
+  border: none;
+}
+
+.page header .addButton:hover {
+  background: #3448b8;
+  color: #ffffff;
+}
+
+.page header .searchButton {
+  height: 40px;
+  width: auto;
+  grid-area: searchButton;
+  font-size: 15px;
+  font-weight: bold;
+  font-family: "Montserrat", sans-serif;
+  background: #1c2c83;
+  color: #ffffff; 
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  border: none;
+}
+
+.page header .searchButton:hover {
+  background: #3448b8;
+  color: #ffffff;
+}
+
+.page .content {
+  grid-area: content;
+  margin: 20px;
+  margin-top: 0px;
+}
+
+.page .content table {
+  width: 100%;
+}
+
+.page .content table thead th {
+  text-align: left;
+  padding: 15px;
+  font-size: 15px;
+}
+
+.page .content table thead tr {
+  height: 40px;
+  background-color: #ffffff;
+  color: #000000;
+  border-bottom: #00000041 solid 1px;
+}
+
+.page .content table tbody tr {
+  height: 40px;
+  border-bottom: #00000041 solid 1px;
+}
+
+.page .content table tbody tr:nth-child(2n) {
+  border-bottom: #00000041 solid 1px;
+}
+
+.page .content table tbody tr td {
+  text-align: left;
+  padding: 15px;
+  font-size: 15px;
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 27px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #3448b8;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 6px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 6px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 26px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 45px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(19px, 0);
+  }
+}
