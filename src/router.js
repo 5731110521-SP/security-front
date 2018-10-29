@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home'
 import CustomerDataTracking from '@/views/CustomerDataTracking'
 import RequestOTTracking from '@/views/RequestOTTracking'
+import ManageConfiguration from '@/views/ManageConfiguration'
 import Login from '@/views/Login'
 
 Vue.use(Router)
@@ -28,6 +29,11 @@ export default new Router({
       path: '/RequestOTTracking',
       name: 'requestOTTracking',
       component: RequestOTTracking
+    },
+    {
+      path: '/ManageConfiguration',
+      name: 'manageConfiguration',
+      component: ManageConfiguration
     },
     {
       path: '*',

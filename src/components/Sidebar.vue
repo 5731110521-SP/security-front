@@ -15,6 +15,10 @@
                     Request OT Tracking Log
                     <i class="fas fa-arrow-right"></i>
                 </router-link>
+                <router-link to="manageConfiguration" class="smallList">
+                    Manage Configuration
+                    <i class="fas fa-arrow-right"></i>
+                </router-link>
             </li>
         </ul>
     </div>
