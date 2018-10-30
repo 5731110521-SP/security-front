@@ -66,6 +66,7 @@
 
 <script>
 import axios from "axios";
+import router from "./../router.js"
 
 export default {
   name: "ManageConfiguration",
@@ -176,8 +177,11 @@ export default {
             if (this.pageNumber == 1) this.getTime();
             else this.pageNumber = 1;
         },
-        async edit(SystemName, FunctionName, Remarks, ID) {
-            router.push('/adminToolsNewFunctionEdit/'+ID);
+        addFunction() {
+            router.push('/ManageConfigurationAdd');
+        },
+        async edit(ID,SystemName,ConfigurationName,Value) {
+            router.push({path:'/ManageConfigurationEdit', params:{ID,SystemName,ConfigurationName,Value}});
         },
         deleteRecord(ID) {
             var body = {
