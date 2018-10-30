@@ -5,7 +5,6 @@ import CustomerDataTracking from '@/views/CustomerDataTracking'
 import RequestOTTracking from '@/views/RequestOTTracking'
 import ManageConfiguration from '@/views/ManageConfiguration'
 import ManageConfigurationAdd from '@/views/ManageConfigurationAdd'
-import Login from '@/views/Login'
 
 Vue.use(Router)
 
@@ -37,7 +36,13 @@ export default new Router({
     {
       path: '/ManageConfigurationAdd',
       name: 'manageConfigurationAdd',
-      component: ManageConfigurationAdd
+      component: ManageConfigurationAdd,
+    },
+    {
+      path: '/ManageConfigurationEdit',
+      name: 'manageConfigurationEdit',
+      component: ManageConfigurationAdd,
+      props: true
     },
     {
       path: '*',

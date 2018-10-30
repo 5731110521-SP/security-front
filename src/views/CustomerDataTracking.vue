@@ -27,7 +27,7 @@
                         <tr>
                             <th>No</th>
                             <th>Timestamp</th>
-                            <th @click="sort_('sysname')">System Name<i ref="sysname" :class="['fas','fa-sort'+sort.sysname]"></i></t>
+                            <th @click="sort_('sysname')">System Name<i ref="sysname" :class="['fas','fa-sort'+sort.sysname]"></i></th>
                             <th @click="sort_('user')">User<i ref="user" :class="['fas','fa-sort'+sort.user]"></i></th>
                             <th @click="sort_('ipaddress')">IP<i ref="ipaddress" :class="['fas','fa-sort'+sort.ipaddress]"></i></th>
                             <th @click="sort_('action')">Action<i ref="action" :class="['fas','fa-sort'+sort.action]"></i></th>

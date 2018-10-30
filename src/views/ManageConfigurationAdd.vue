@@ -35,6 +35,12 @@
 
 <script>
     export default {
+        props:{
+            ID:String,
+            SystemName:String,
+            ConfigurationName:String,
+            Value:String
+        },
         name: 'ManageConfiguration',
         data() {
             return {
@@ -43,15 +49,15 @@
                 value: ''
             }
         },
+        mounted(){
+            console.log(this.ID)
+        },
         methods: {
             submit() {
                 this.$http.post('security-config', {
                         "sysname": this.sysname,
                         "configurationname": this.configurationname,
                         "value": this.value,
-                    })
-                    .then(response => {
-                        
                     })
                     .catch(error => {
                         this.$parent.messageError(error.message, error.response.data)
