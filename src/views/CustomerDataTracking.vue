@@ -27,10 +27,10 @@
                         <tr>
                             <th>No</th>
                             <th>Timestamp</th>
-                            <th>System Name</th>
-                            <th>User</th>
-                            <th>IP</th>
-                            <th>Action</th>
+                            <th @click="sort_('sysname')">System Name<i ref="sysname" :class="['fas','fa-sort'+sort.sysname]"></i></t>
+                            <th @click="sort_('user')">User<i ref="user" :class="['fas','fa-sort'+sort.user]"></i></th>
+                            <th @click="sort_('ipaddress')">IP<i ref="ipaddress" :class="['fas','fa-sort'+sort.ipaddress]"></i></th>
+                            <th @click="sort_('action')">Action<i ref="action" :class="['fas','fa-sort'+sort.action]"></i></th>
                             <th>Customer Data</th>
                             <th>Custom Field</th>
                         </tr>
@@ -123,6 +123,15 @@
                 ],
                 searchValue: '',
                 isLoading: true,
+                sort:{
+                    sysname:'',
+                    user:'',
+                    ipaddress:'',
+                    action:'',
+
+                },
+                sortDirection: null,
+                sortBy: null,
             }
         },
         watch: {
@@ -151,6 +160,8 @@
                             value: this.searchValue == '' ? null : this.searchValue,
                             pagenumber: this.pageNumber,
                             pagesize: this.pageSize,
+                            sortby: this.sortBy,
+                            direction: this.sortDirection,
                         }
                     })
                     .then(response => {
@@ -185,6 +196,19 @@
             search() {
                 if (this.pageNumber == 1) this.getData()
                 else this.pageNumber = 1
+            },
+            sort_(id){
+                var value = this.sort[id]
+                this.sort.sysname=''
+                this.sortBy=id
+                if(value=='-up sortUpAnimation'){
+                    this.sort[id]= '-down sortDownAnimation'
+                    this.sortDirection = 'desc'
+                }else{
+                    this.sort[id] = '-up sortUpAnimation'
+                    this.sortDirection = 'asc'
+                }
+                this.getData()
             }
         },
     }

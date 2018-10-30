@@ -1,94 +1,113 @@
 <template>
     <div class="page">
-        <header id="addNewFunction1Header" style="padding-bottom:0;">
+        <header>
             <div class="contentHeader">
                 <div class="mainHeader">
-                    New Function
+                    New Configuration
                 </div>
                 <div class="description">
-                    for add new Function to system .
+                    for add new configuration .
                 </div>
             </div>
             <div class="left_input" style="border-top:1px solid #00000063"></div>
         </header>
-        <content id="addNewFunction1Content" style="font-size:20px;justify-items:center;width:60%">
-            <div style="width:100%;">
-                <form @submit.prevent="validateBeforeSubmitAdd">
-                    <div style="display:flex;justify-content:space-between;">SystemName* :
-                        <select v-model="selectSystemName">
-                            <option v-for="data in responseForShowInApplicationDropdown" :key="data.id" v-bind:value="data.id">{{data.name}}</option>
-                        </select>
+        <div class="content">
+            <div>
+                <form @submit.prevent="submit">
+                    <div>SystemName* :
+                        <input type="textbox" required v-model="sysname">
                     </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:20px">FunctionName* :
-                        <input style="margin-left:10px" type="textbox" v-model="FunctionName" v-validate="'required|alpha'" name="functionName1" :class="errors.has('functionName1')? 'redbg':''">
+                    <div>Configuration Name* :
+                        <input style="margin-left:10px" type="textbox" required v-model="configurationname">
                     </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:20px">Remark
-                        <input style="margin-left:10px" type="textbox" v-model="Remark" >
+                    <div>Value
+                        <input style="margin-left:10px" type="textbox" required v-model="value">
                     </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:20px" >StorePoc
-                        <select v-model="selectStoreProc">
-                            <option v-for="i in responseForStoreProcDropDown" :key="i.name" v-bind:value="i.name">{{i.name}}</option>
-                        </select>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:20px">
-                        <input type="checkbox" id="checkbox" v-model="allowMultipleAdd">
-                        AllowMultipleAdd
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:20px">
-                        <input type="checkbox" id="checkbox" v-model="viewCheck">
-                        ViewSearch
-                        <select v-model="selectView">
-                            <option v-for="i in responseForViewDropdown" :key="i.name" v-bind:value="i.name">{{i.name}}</option>
-                        </select>
+                    <div class="button-div">
+                        <button class="submitBtnInPopUp" type="button" @click="routerGoBack">cancel</button>
+                        <button class="submitBtnInPopUp" type="submit" value="Submit">submit</button>
                     </div>
                 </form>
-                <div style="display:flex;justify-content:space-evenly;margin-top:30px">
-                    <button class="submitBtnInPopUp" style="background:#c9465d;" value="close">cancel</button>
-                    <form @submit.prevent="validateBeforeSubmitAdd">
-                        <button class="submitBtnInPopUp" style="background:#3769ba;" value="submit">submit</button>
-                    </form>
-                </div>
             </div>
-        </content>
-        <header id="addNewFunction2Header" style="visibility:hidden;padding-bottom:0;">
-            <div class="contentHeader">
-                <div class="mainHeader">
-                    New Function
-                </div>
-                <div class="description">
-                    for add new Function to system .
-                </div>
-            </div>
-            <div class="left_input" style="border-top:1px solid #00000063"></div>
-        </header>
-        <content id="addNewFunction2Content" style="visibility:hidden;font-size:20px;justify-items:center;width:60%;">
-            <table >
-                <thead>
-                    <tr style="display: flex;justify-content: space-between;width: 100%;border: none;">
-                        <th>Paramenter Name</th>
-                        <th>Display Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="display: flex;justify-content: space-between;width: 100%;border: none;" v-for="(i,index) in responseShowInput" :key="index">
-                        <td >{{i.name}}</td>
-                        <td><input type="textBox" v-model="i.displayName"></td>
-                    </tr> 
-                </tbody>
-            </table>
-            <div style="display:flex;justify-content:space-around;margin-top:30px">
-                <button class="submitBtnInPopUp cancelBtn" value="close">cancel</button>
-                <button class="submitBtnInPopUp" value="submit">submit</button>
-            </div>
-        </content>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
         name: 'ManageConfiguration',
+        data() {
+            return {
+                sysname: '',
+                configurationname: '',
+                value: ''
+            }
+        },
+        methods: {
+            submit() {
+                this.$http.post('security-config', {
+                        "sysname": this.sysname,
+                        "configurationname": this.configurationname,
+                        "value": this.value,
+                    })
+                    .then(response => {
+                        
+                    })
+                    .catch(error => {
+                        this.$parent.messageError(error.message, error.response.data)
+                    });
+                this.routerGoBack()
+            },
+            routerGoBack() {
+                this.$router.go(-1)
+            }
+        }
     }
 </script>
 
-<style>
+<style lang="scss">
+    header{
+        padding-bottom:0;
+    }
+
+    .page .content{
+        font-size:20px;justify-items:center;width:60%
+    }
+
+    .page .content form div{
+        display:flex;justify-content:space-between;margin-bottom:20px;
+    }
+
+    .page .content form div.button-div{
+        display:flex;justify-content:space-evenly;margin-top:30px
+    }
+    
+    .submitBtnInPopUp {
+        font-family: "Montserrat", sans-serif;
+        width: auto;
+        height: auto;
+        background: #1c2c83;
+        color: #ffffff;
+        cursor: pointer;
+        border-radius: 2px;
+        border: none;
+        padding: 15px 30px 15px 30px;
+    }
+
+    .submitBtnInPopUp[type=button]{
+        background:#c9465d;
+    }
+
+    .submitBtnInPopUp[type=button]:hover{
+        background: darken(#c9465d,10%);
+    }
+
+    .submitBtnInPopUp[type=submit]{
+        background:#3769ba;
+    }
+
+    .submitBtnInPopUp[type=submit]:hover {
+        background: darken(#3769ba,10%);
+        color: #ffffff;
+    }
 </style>

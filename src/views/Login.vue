@@ -3,21 +3,12 @@
         <div class="warpLogin">
             <form>
                 <div id="loginHeader">
-                    Login
+                    LOGIN
                 </div>
-                <div>
-                    asd
-                    <!-- <input type="text" placeholder="Username"/>
-                    <input type="password" placeholder="Password"/> -->
-                </div>
-                <button>Login</button>
+                    <input type="text" placeholder="Username" required />
+                    <input type="password" placeholder="Password" required />
+                <button>LOGIN</button>
             </form>
-        </div>
-        <div class="lds-ellipsis">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
         </div>
     </div>
 </template>
@@ -37,29 +28,52 @@
 
 <style lang="scss">
     .containerLogin {
+        margin-top:80px;
         position: fixed;
         top: 50%;
         left: 50%;
+        transform: translate(-50%, -50%);
+        width:340px;
     }
 
     .warpLogin {
         padding-top: 50px;
         padding-bottom: 90px;
-        
     }
 
-    .warpLogin form span{
-        width: 100%;
-        padding-bottom: 100px;
+    #loginHeader{
+        margin-bottom: 50px;
+        font-size: 30px;
+        font-weight: 400;
+        color: #707070;
     }
-    .warpLogin form div input{
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        background: gainsboro;
-        box-sizing: border-box;
+
+    .warpLogin input{
+        display: block;
+        margin-bottom: 16px;
+        width:100%;
+        height: 60px;
+        border: none;
+        background: whitesmoke;
+        font-size: 18px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
-    .warpLogin form button{
-        width: 100%;
+
+    .warpLogin button{
+        width:100%;
+        height: 60px;
+        margin-top: 40px;
+        background-color: #171463;
+        border: none;
+        color: whitesmoke;
+        font-size: 16px;
+        cursor: pointer;
+        transition-duration: 0.4s;
+        -webkit-transition-duration: 0.4s;
     }
+.warpLogin button:hover{
+    background-color: lighten($color: #171463, $amount: 20);
+}
+
 </style>

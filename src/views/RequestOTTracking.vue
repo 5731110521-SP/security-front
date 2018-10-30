@@ -50,15 +50,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(data,index) in responseForTable" :key="index">
-              <td class="no" v-if="!isSameMemonumAsBefore(index)" :rowspan="getRowspan(index)"></td>
+            <tr v-for="(data,index) in responseForTableWithNo" :key="index">
+              <td v-if="data.no" :rowspan="data.no.count">{{data.no.numberCount}}</td>
               <td>{{ data.memonum }}</td>
               <td>{{ data.action }}</td>
-              <td>{{ data.actionby }}</td>
+              <td>{{ data.firstname }} {{ data.lastname }}</td>
               <td>{{ data.datetime }}</td>
-              <td>{{ data.status }}</td>
+              <td :class="data.status=='Error'?'red-text':''">{{ data.status }}</td>
               <td>
-                <div>{{ data.errmsg }}</div>
+                <input class="red-text" :value="data.errmsg" disabled/>
               </td>
             </tr>
           </tbody>
@@ -159,7 +159,7 @@
           }
         ],
         isLoading: true,
-      };
+      }
     },
     mounted() {
       this.date_to = new Date();
@@ -170,29 +170,37 @@
     },
     computed: {
       responseForTableWithNo() {
-        var obj = [],
-          prevNo = 0,
+        var tableWithNo = [];
+        var memonum, currentMemonum = -1,
+          currentStartIndex = -1,
           count = 0,
-          idx,
-          currNo;
-        for (idx = 0; idx < this.responseForTable.length; idx++) {
-          currNo = this.responseForTable[idx].memonum.slice(-3) * 1;
-          if (currNo == prevNo) count++;
-          else if (idx > 0) {
-            obj[idx - 1].no = {
-              count: count + 1,
-              no: prevNo
-            };
-            count = 0;
+          numberCount = 1
+        for (var i = 0; i < this.responseForTable.length; i++) {
+          memonum = this.responseForTable[i].memonum.substring(2) * 1
+          if (memonum != currentMemonum) {
+            if (currentStartIndex > -1) {
+              tableWithNo[currentStartIndex].no = {
+                count: count,
+                numberCount: numberCount
+              }
+              numberCount++
+            }
+            currentMemonum = memonum
+            currentStartIndex = i
+            count = 1
+          } else {
+            count++
           }
-          prevNo = currNo;
-          obj.push(this.responseForTable[idx]);
+          tableWithNo.push(this.responseForTable[i])
         }
-        obj[obj.length - 1].no = {
-          count: count + 1,
-          no: currNo
-        };
-        return obj;
+        if (currentStartIndex > -1) {
+          tableWithNo[currentStartIndex].no = {
+            count: count,
+            numberCount: numberCount
+          }
+        }
+        return tableWithNo
+
       },
       computedPageNumberMax: function () {
         var floor = Math.floor(this.datatotal / this.pageSize);
@@ -236,7 +244,8 @@
               this.responseForTable = response.data.logtracking;
               this.datatotal = response.data.total;
             }
-            this.isLoading = false
+            this.isLoading =
+              console.log(this.responseForTableWithNo)
           })
           .catch(function (error) {
             vm.$parent.messageError(error.message, error.response.data)
@@ -259,29 +268,6 @@
       },
       pageGo(i) {
         this.pageNumber = i;
-      },
-      isSameMemonumAsBefore(index) {
-        if (index != 0) {
-          if (
-            this.responseForTable[index].memonum ==
-            this.responseForTable[index - 1].memonum
-          ) {
-            return true;
-          }
-        }
-        return false;
-      },
-      getRowspan(index) {
-        var currentMemonum = this.responseForTable[index].memonum;
-        var rowspan = 0;
-        for (var i = index; i < this.responseForTable.length; i++) {
-          if (this.responseForTable[i].memonum == currentMemonum) {
-            rowspan++;
-          } else {
-            break;
-          }
-        }
-        return rowspan;
       },
       search() {
         if (this.pageNumber == 1) this.getTime();
@@ -380,10 +366,10 @@
     width: 200px;
   }
 
-  .page.requestOTTracking .content table tbody tr td div {
+  .page.requestOTTracking .content table tbody tr .red-text {
     max-width: 300px;
-    word-wrap: break-word;
-    font-size: 12px;
     color: #e24c4b;
+    background: transparent;
+    border: none;
   }
 </style>
