@@ -19,41 +19,48 @@
             <button class="searchButton" @click="search()">Search</button>
             <button class="addButton submitBtn" v-on:click="addFunction()">New Function</button>
         </header>
-        <content>
+        <div class="content">
             <table>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th class="cursorP" rowspan="2" @click="sort_('appName')">SystemName <i ref='appName' :class="['fas' ,'fa-sort'+di.appName]"></i></th>
-                        <th class="cursorP" rowspan="2" @click="sort_('name')">FunctionName <i ref='name' :class="['fas' ,'fa-sort'+di.name]"></i></th>
-                        <th rowspan="2">Remark</th>
-                        <th rowspan="2">Edit</th>
-                        <th rowspan="2">Delete</th>
+                        <th>SystemName</th>
+                        <th>ConfigurationName</th>
+                        <th>Value</th>
+                        <th>CreatedDate</th>
+                        <th>LastModified</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tr></tr>
                 <tbody>
                     <tr v-for="(data, index) in responseForTable" :key='index'>
-                        <td v-if="sortDirection == 'asc'">{{index+1+(currentPage-1)*pageSize}}</td>
-                        <td v-else>{{count-(index+(currentPage-1)*pageSize)}}</td>
-                        <td>{{ data.application.name}}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.remarks }}</td>
+                        <td class="no" v-if="!isSameMemonumAsBefore(index)" :rowspan="getRowspan(index)"></td>
+                        <td>{{ data.sysname}}</td>
+                        <td>{{ data.configurationname }}</td>
+                        <td>{{ data.value }}</td>
+                        <td>{{ data.createddate }}</td>
+                        <td>{{ data.lastmodified }}</td>
                         <td><i class="far fa-edit editHover" style="width:15px;height:15px;cursor:pointer" 
-                        v-on:click="edit(data.id)"></i></td>
+                        v-on:click="edit(data.id,data.sysname,data.configurationname,data.value)"></i></td>
                         <td><i class="fas fa-trash-alt deleteHover" style="width:15px;height:15px;cursor:pointer;" 
-                        v-on:click="deleteRecord(data.application.name,data.name,data.remarks,data.id)"></i></td>
+                        v-on:click="deleteRecord(data.id)"></i></td>
                     </tr>
                 </tbody>
             </table>
-            <div>
+            <div class="emptyState" v-if="datatotal == 0">
+                <img src="../assets/log-file-format.png">
+                <p>No result were found .</p>
+            </div>
+            <div class="pagination-content" v-else>
                 <div class="pagination">
-                    <a v-if="currentPage != 1" v-on:click="changePage(currentPage-1)">&laquo;</a>
-                    <a v-for="(i,index) in totalPage" :key="index" :class="i == currentPage? 'active':''" v-on:click="changePage(i)">{{i}}</a>
-                    <a v-if="currentPage != totalPage" v-on:click="changePage(currentPage+1)">&raquo;</a>
+                    <a :class="pageNumber==1?'hidden':''" @click="pageBack">&laquo;</a>
+                    <a :class="i==pageNumber?'active':''" v-for="i in computedPageNumberMax" :key="i" @click="pageGo(i)">{{i}}</a>
+                    <a :class="pageNumber==computedPageNumberMax?'hidden':''" @click="pageNext">&raquo;</a>
                 </div>
             </div>
-        </content>
+        </div>
     </div>
 </template>
 
@@ -61,192 +68,133 @@
 import axios from "axios";
 
 export default {
-  name: "HelloWorld",
+  name: "ManageConfiguration",
   props: {
     msg: String
   },
 
   data() {
     return {
-      querySearch:'',
-      di:{appName:'',name:''},
-      sortBy:'',
-      sortDirection:'',
-      Name: "",
-      Host: "",
-      Remark: "",
-      Username: "",
-      Password: "",
-      FunctionName: "",
-      ID: 0,
-      valueForSearch: "",
-      responseForTable: [],
-      currentPage: 1,
-      totalPage: 0,
-      pageSize: 5,
-      method: "add",
-      responseForShowInApplicationDropdown: [],
-      searchOption: [
-        {
-          key: "applicationProfileName",
-          text: "SystemName",
-          value: "appName"
-        },
-        { key: "name", text: "FunctionName", value: "name" }
-      ],
-      multiselectForSearch: [],
-      FunctionName: "",
-      Remarks: "",
-      count:0,
-      SystemName:''
+        datatotal: 0,
+        pageNumber: 1,
+        pageSize: 10,
+        responseForTable: "",
+        multiselectForSearch: [],
+        dataid:"",
+        sysname: "",
+        configurationname: "",
+        datavalue: "",
+        searchOption: [
+            {
+            key: "applicationProfileName",
+            text: "SystemName",
+            value: "appName"
+            },
+            { key: "name", text: "FunctionName", value: "name" }
+        ],
     };
   },
-  methods: {
-    addTag(newTag) {
-      const tag = {
-        name: newTag,
-        code: newTag.substring(0, 2) + Math.floor(Math.random() * 10000000)
-      };
-      this.options.push(tag);
-      this.value.push(tag);
+  mounted() {
+      this.getTime();
     },
-    async addFunction() {
-      router.push('/adminToolsNewfunctionAdd')
+    watch: {
+      pageNumber: "getTime"
     },
-    showPopup(popUpName) {
-      document.getElementById(popUpName).style.display = "flex";
-    },
-    closePopUp(popUpName) {
-      this.SystemName = "";
-      this.Database = "";
-      this.Port = "";
-      this.IPAddress = "";
-      this.Username = "";
-      this.Password = "";
-
-      document.getElementById(popUpName).style.display = "none";
-    },
-
-    async edit(ID) {
-      router.push('/adminToolsNewFunctionEdit/'+ID);
-    },
-    deleteRecord(SystemName, FunctionName, Remarks, ID) {
-      this.SystemName = SystemName;
-      this.FunctionName = FunctionName;
-      this.Remarks = Remarks;
-      this.ID = ID;
-
-      this.showPopup("popUpConfirmDelete");
-    },
-    async editApplicationProfile() {
-      let editApplicationProfile = {
-        Name: this.SystemName,
-        DBName: this.Database,
-        Port: Number(this.Port),
-        Host: this.IPAddress,
-        Username: this.Username,
-        Password: this.Password
-      };
-
-      if (
-        this.SystemName != "" &&
-        this.Database != "" &&
-        this.Port != "" &&
-        this.IPAddress != "" &&
-        this.Username != "" &&
-        this.Password != ""
-      ) {
-        await this.$http.put(
-          "/application-profile/" + this.ID,
-          editApplicationProfile
-        );
-
-        const dataForTable = await this.$http.get(
-          "/application-profile?pageSize=" +
-            this.pageSize +
-            "&page=" +
-            this.currentPage
-        );
-        this.responseForTable = dataForTable.data.Functions;
-        this.totalPage = dataForTable.data.TotalPage;
-        this.count = dataForTable.data.count;
-
-        this.SystemName = "";
-        this.Database = "";
-        this.Port = "";
-        this.IPAddress = "";
-        this.Username = "";
-        this.Password = "";
-        this.ID = 0;
-
-        this.closeEditPopUp();
+    computed: {
+      computedPageNumberMax: function () {
+        var floor = Math.floor(this.datatotal / this.pageSize);
+        if (this.datatotal / this.pageSize > floor) {
+          return floor + 1;
+        } else {
+          return floor;
+        }
       }
     },
+    methods: {
+        getTime() {
+            var vm = this
 
-    async changePage(i) {
-      this.currentPage = i;
-
-      const data = await this.$http.get(
-        "/function/page/" + this.currentPage + "?pageSize=" + this.pageSize+"&sortBy="+this.sortBy+"&direction="+this.sortDirection
-      );
-      this.count = data.data.count;
-      this.responseForTable = data.data.functions;
-      this.responseForShowInApplicationDropdown = data.data.function;
-      this.totalPage = data.data.totalPage;
-    },
-    async sort_(id){
-      if(id != 'name')
-        this.di['name']='';
-      if(id != 'appName')
-        this.di['appName']='';
-      else{}
-        console.log("id : "+id);
-        console.log("this.[id] : "+this.di[id]);
-
-      var data;
-      this.sortBy=id;
-      if(this.di[id] == '-up sortUpAnimation'){
-        this.di[id] = '-down sortDownAnimation'
-        this.sortDirection = 'desc';
-        data = await this.$http.get(
-      "/function/page/1?pageSize=" + this.pageSize+"&sortBy="+this.sortBy+"&direction="+this.sortDirection+"&"+this.querySearch);
-      
-      }else{
-        this.di[id] = '-up sortUpAnimation'
-        this.sortDirection = 'asc';
-        data = await this.$http.get(
-      "/function/page/1?pageSize=" + this.pageSize+"&sortBy="+this.sortBy+"&direction="+this.sortDirection+"&"+this.querySearch);
-      
-      }
-      this.count = data.data.count;
-      this.responseForTable = data.data.functions;
-      this.totalPage = data.data.totalPage;
-       
-       this.$refs[id]
-    },
-    async search(){
-      var i;
-
-      for (i = 0; i < this.multiselectForSearch.length; i++) {
-        if (i == 0)
-          this.querySearch +=
-            this.multiselectForSearch[i] + "=" + this.valueForSearch;
-        else
-          this.querySearch +=
-            "&" + this.multiselectForSearch[i] + "=" + this.valueForSearch;
-      }
-      const response = await this.$http.get(
-        "/function/page/1?" + this.querySearch + "&pageSize=" + this.pageSize
-      );
-      this.count = response.data.count;
-      this.responseForTable = response.data.functions;
-      this.totalPage = response.data.totalPage;
+            this.$http
+            .get("security-config", {
+                params: {
+                pagenumber: this.pageNumber,
+                pagesize: this.pageSize
+                }
+            })
+            .then(response => {
+                if (response.data == null) {
+                this.responseForTable = [];
+                this.datatotal = 0;
+                } else {
+                this.responseForTable = response.data.configuration;
+                this.dataid = response.data.configuration.id
+                this.sysname = response.data.configuration.sysname
+                this.configurationname = response.data.configuration.configurationname
+                this.datavalue = response.data.configuration.value
+                this.datatotal = response.data.total;
+                }
+            })
+            .catch(function (error) {
+                vm.$parent.messageError(error.message, error.response.data)
+            });
+        },
+        pageBack() {
+            if (this.pageNumber == 1) return;
+            this.pageNumber -= 1;
+        },
+        pageNext() {
+            if (this.pageNumber == this.computedPageNumberMax) return;
+            this.pageNumber += 1;
+        },
+        pageGo(i) {
+            this.pageNumber = i;
+        },
+        isSameMemonumAsBefore(index) {
+            if (index != 0) {
+            if (
+                this.responseForTable[index].id ==
+                this.responseForTable[index - 1].id
+            ) {
+                return true;
+            }
+            }
+            return false;
+        },
+        getRowspan(index) {
+            var currentMemonum = this.responseForTable[index].id;
+            var rowspan = 0;
+            for (var i = index; i < this.responseForTable.length; i++) {
+            if (this.responseForTable[i].id == currentMemonum) {
+                rowspan++;
+            } else {
+                break;
+            }
+            }
+            return rowspan;
+        },
+        search() {
+            if (this.pageNumber == 1) this.getTime();
+            else this.pageNumber = 1;
+        },
+        async edit(SystemName, FunctionName, Remarks, ID) {
+            router.push('/adminToolsNewFunctionEdit/'+ID);
+        },
+        deleteRecord(ID) {
+            var body = {
+                data:{id: ID}
+            }
+            this.$http
+            .delete("security-config", body)
+            .then(response => {
+                if (response.data == null) {
+                // this.responseForTable = [];
+                // this.datatotal = 0;
+                } else {
+                    this.getTime()
+                }
+            })
+        },
     }
-  },
-  async mounted() {
-
-  },
-
 };
 </script>
 
@@ -348,6 +296,10 @@ export default {
 }
 .cancelBtn:hover {
   background: #c6c6c6;
+}
+
+.cursorP{
+  cursor: pointer;
 }
 </style>
 
