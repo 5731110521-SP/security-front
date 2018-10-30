@@ -37,6 +37,7 @@ export default new Router({
       path: '/ManageConfigurationAdd',
       name: 'manageConfigurationAdd',
       component: ManageConfigurationAdd,
+      props: true
     },
     {
       path: '/ManageConfigurationEdit',

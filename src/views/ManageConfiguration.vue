@@ -11,11 +11,11 @@
                 :options="searchOption"
                 placeholder="Pick some.."
                 selection
-                v-model="multiselectForSearch"
+                v-model="searchBy"
                 class="left_input"
                 style="height:auto"
             />
-            <input class="right_input" placeholder="search..." v-model="valueForSearch" >
+            <input class="right_input" placeholder="search..." v-model="searchValue" >
             <button class="searchButton" @click="search()">Search</button>
             <button class="addButton submitBtn" v-on:click="addFunction()">New Function</button>
         </header>
@@ -80,18 +80,19 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         responseForTable: "",
-        multiselectForSearch: [],
         dataid:"",
         sysname: "",
         configurationname: "",
         datavalue: "",
+        searchBy: [],
+        searchValue: '',
         searchOption: [
             {
-            key: "applicationProfileName",
+            key: "SystemName",
             text: "SystemName",
-            value: "appName"
+            value: "sysname"
             },
-            { key: "name", text: "FunctionName", value: "name" }
+            { key: "ConfigurationName", text: "ConfigurationName", value: "configurationname" }
         ],
     };
   },
@@ -118,6 +119,8 @@ export default {
             this.$http
             .get("security-config", {
                 params: {
+                fields: this.searchBy == [] ? null : this.searchBy,
+                value: this.searchValue == '' ? null : this.searchValue,
                 pagenumber: this.pageNumber,
                 pagesize: this.pageSize
                 }
@@ -181,7 +184,7 @@ export default {
             router.push('/ManageConfigurationAdd');
         },
         async edit(ID,SystemName,ConfigurationName,Value) {
-            router.push({path:'/ManageConfigurationEdit', params:{ID,SystemName,ConfigurationName,Value}});
+            router.push({name:'manageConfigurationEdit', params:{ ID,SystemName,ConfigurationName,Value }});
         },
         deleteRecord(ID) {
             var body = {

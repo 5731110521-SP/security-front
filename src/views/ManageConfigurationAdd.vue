@@ -50,22 +50,41 @@
             }
         },
         mounted(){
-            console.log(this.ID)
+            this.sysname = this.SystemName
+            this.configurationname = this.ConfigurationName
+            this.value = this.Value
         },
         methods: {
             submit() {
-                this.$http.post('security-config', {
-                        "sysname": this.sysname,
-                        "configurationname": this.configurationname,
-                        "value": this.value,
-                    })
-                    .catch(error => {
-                        this.$parent.messageError(error.message, error.response.data)
-                    });
-                this.routerGoBack()
+                if (this.ID != null) {
+                    this.$http.put('security-config', {
+                            "id": this.ID,
+                            "sysname": this.sysname,
+                            "configurationname": this.configurationname,
+                            "value": this.value,
+                        })
+                        .catch(error => {
+                            this.$parent.messageError(error.message, error.response.data)
+                        });
+                    this.routerGo()
+                }
+                else{
+                    this.$http.post('security-config', {
+                            "sysname": this.sysname,
+                            "configurationname": this.configurationname,
+                            "value": this.value,
+                        })
+                        .catch(error => {
+                            this.$parent.messageError(error.message, error.response.data)
+                        });
+                    this.routerGo()
+                }
             },
             routerGoBack() {
                 this.$router.go(-1)
+            },
+            routerGo() {
+                this.$router.push('/ManageConfiguration')
             }
         }
     }
