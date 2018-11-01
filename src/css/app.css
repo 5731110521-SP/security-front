@@ -92,12 +92,10 @@ body {
 }
 
 .page header .addButton {
-  height: 40px;
   grid-area: addButton;
   font-size: 15px;
   font-weight: bold;
   text-align: center;
-  display: flex;
   align-items: center;
 
   font-family: "Montserrat", sans-serif;
@@ -126,8 +124,6 @@ body {
   font-family: "Montserrat", sans-serif;
   background: #1c2c83;
   color: #ffffff; 
-  margin-left: 10px;
-  margin-right: 10px;
   cursor: pointer;
   border-radius: 2px;
   border: none;
@@ -142,6 +138,8 @@ body {
   grid-area: content;
   margin: 20px;
   margin-top: 0px;
+  width: 100%;
+  padding-right: 20px
 }
 
 .page .content table {

@@ -7,7 +7,7 @@
       </div>
       <div class="searchBy">
         <a>Search By:</a>
-        <sui-dropdown class="left_input" fluid multiple :options="searchOptions" placeholder="Search By" selection
+        <sui-dropdown class="left_input" fluid multiple :options="searchOptions" placeholder="Search by..." selection
           v-model="searchByRaw" />
         <a></a>
         <input class="right_input" v-model="searchValue" placeholder="search...">
@@ -58,7 +58,7 @@
               <td>{{ data.datetime }}</td>
               <td :class="data.status=='Error'?'red-text':''">{{ data.status }}</td>
               <td>
-                <input class="red-text" :value="data.errmsg" disabled/>
+                <input class="red-text" :value="data.errmsg" disabled />
               </td>
             </tr>
           </tbody>
@@ -170,6 +170,7 @@
     },
     computed: {
       responseForTableWithNo() {
+        if(this.responseForTable==null) return []
         var tableWithNo = [];
         var memonum, currentMemonum = -1,
           currentStartIndex = -1,
@@ -244,8 +245,7 @@
               this.responseForTable = response.data.logtracking;
               this.datatotal = response.data.total;
             }
-            this.isLoading =
-              console.log(this.responseForTableWithNo)
+            this.isLoading = false
           })
           .catch(function (error) {
             vm.$parent.messageError(error.message, error.response.data)
@@ -290,7 +290,7 @@
   }
 
   .pagination a {
-    color: white;
+    color: black;
     float: left;
     padding: 5px 11px;
     text-decoration: none;
@@ -367,9 +367,17 @@
   }
 
   .page.requestOTTracking .content table tbody tr .red-text {
-    max-width: 300px;
     color: #e24c4b;
-    background: transparent;
+  }
+
+  .page.requestOTTracking .content table tbody tr input.red-text {
+    max-width: 300px;
     border: none;
+    cursor: text;
+    background: transparent;
+  }
+
+  .page.requestOTTracking .content table tbody tr input.red-text:focus {
+    border-right: 1px solid black;
   }
 </style>

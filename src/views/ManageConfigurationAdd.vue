@@ -9,9 +9,9 @@
                     for add new configuration .
                 </div>
             </div>
-            <div class="left_input" style="border-top:1px solid #00000063"></div>
+            <div class="left_input" style="border-top:1px solid #00000063;height:10px"></div>
         </header>
-        <div class="content">
+        <div class="content" id="manageConfigurationAdd">
             <div>
                 <form @submit.prevent="submit">
                     <div>SystemName* :
@@ -62,22 +62,24 @@
                             "sysname": this.sysname,
                             "configurationname": this.configurationname,
                             "value": this.value,
+                        }).then(response=>{
+                            this.routerGo()
                         })
                         .catch(error => {
                             this.$parent.messageError(error.message, error.response.data)
                         });
-                    this.routerGo()
                 }
                 else{
                     this.$http.post('security-config', {
                             "sysname": this.sysname,
                             "configurationname": this.configurationname,
                             "value": this.value,
+                        }).then(response=>{
+                            this.routerGo()
                         })
                         .catch(error => {
                             this.$parent.messageError(error.message, error.response.data)
                         });
-                    this.routerGo()
                 }
             },
             routerGoBack() {
@@ -95,15 +97,15 @@
         padding-bottom:0;
     }
 
-    .page .content{
+    .page .content#manageConfigurationAdd{
         font-size:20px;justify-items:center;width:60%
     }
 
-    .page .content form div{
+    .page .content#manageConfigurationAdd form div{
         display:flex;justify-content:space-between;margin-bottom:20px;
     }
 
-    .page .content form div.button-div{
+    .page .content#manageConfigurationAdd form div.button-div{
         display:flex;justify-content:space-evenly;margin-top:30px
     }
     

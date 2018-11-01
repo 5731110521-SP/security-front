@@ -9,7 +9,7 @@
                     for search customer data log .
                 </div>
             </div>
-            <sui-dropdown class="left_input" fluid multiple :options="searchOptions" placeholder="Search By" selection
+            <sui-dropdown class="left_input" fluid multiple :options="searchOptions" placeholder="Search by..." selection
                 v-model="searchBy" />
             <input class="right_input" v-model="searchValue" placeholder="search...">
             <button class="searchButton" @click="search">Search</button>
@@ -26,7 +26,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Timestamp</th>
+                            <th style="min-width:255px;">Timestamp</th>
                             <th @click="sort_('sysname')">System Name<i ref="sysname" :class="['fas','fa-sort'+sort.sysname]"></i></th>
                             <th @click="sort_('user')">User<i ref="user" :class="['fas','fa-sort'+sort.user]"></i></th>
                             <th @click="sort_('ipaddress')">IP<i ref="ipaddress" :class="['fas','fa-sort'+sort.ipaddress]"></i></th>

@@ -2,14 +2,15 @@
     <div class="page manageConfiguration">
         <header>
             <div class="contentHeader">
-                <div class="mainHeader">Function Management</div>
-                <div class="description">for create new configuration about database . </div>
+                <div class="mainHeader">Configuration Management</div>
+                <div class="description">for create new configuration . </div>
             </div>
+            <button class="addButton" v-on:click="addFunction()">New Configuration</button>
             <sui-dropdown
                 fluid
                 multiple
                 :options="searchOption"
-                placeholder="Pick some.."
+                placeholder="Search by..."
                 selection
                 v-model="searchBy"
                 class="left_input"
@@ -17,7 +18,6 @@
             />
             <input class="right_input" placeholder="search..." v-model="searchValue" >
             <button class="searchButton" @click="search()">Search</button>
-            <button class="addButton submitBtn" v-on:click="addFunction()">New Function</button>
         </header>
         <div class="content">
             <table>
@@ -36,7 +36,7 @@
                 <tr></tr>
                 <tbody>
                     <tr v-for="(data, index) in responseForTable" :key='index'>
-                        <td class="no" v-if="!isSameMemonumAsBefore(index)" :rowspan="getRowspan(index)"></td>
+                        <td>{{(pageNumber-1)*pageSize+index+1}}</td>
                         <td>{{ data.sysname}}</td>
                         <td>{{ data.configurationname }}</td>
                         <td>{{ data.value }}</td>
@@ -207,32 +207,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
-@import url("https://fonts.googleapis.com/css?family=Kanit:400,700");
-
-.submitBtnInPopUp {
-  /* margin-top: 30px; */
-  font-family: "Montserrat", sans-serif;
-  width: auto;
-  height: auto;
-  background: #1c2c83;
-  color: #ffffff;
-  /* margin: 10px; */
-  cursor: pointer;
-  border-radius: 2px;
-  border: none;
-  padding: 15px 30px 15px 30px;
-}
-
-.submitBtnInPopUp:hover {
-  background: #22349b;
-  color: #ffffff;
-}
-
-.headerThai {
-  font-family: "Kanit", sans-serif;
-}
-
 .pagination {
   margin-top: 10px;
   display: inline-block;
