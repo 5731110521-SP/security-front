@@ -66,15 +66,15 @@
                 Are you sure to delete this record ?
                 <div style="display:flex;justify-content:space-between;margin-top:40px;width:100%;flex-direction:row;">
                     <div>SystemName :</div>
-                    <div>{{this.SystemName}}</div>
+                    <div>{{this.sysname}}</div>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-top:30px;width:100%;flex-direction:row;">
-                    <div>FunctionName :</div>
-                    <div>{{this.FunctionName}}</div>
+                    <div>ConfigurationName :</div>
+                    <div>{{this.configurationname}}</div>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-top:30px;width:100%;flex-direction:row;">
-                    <div>Remarks :</div>
-                    <div>{{this.Remarks}}</div>
+                    <div>Value :</div>
+                    <div>{{this.datavalue}}</div>
                 </div>
                 <div style="display:flex;justify-content:space-evenly;margin-top:30px">
                     <button class="submitBtnInPopUp cancelBtn"  v-on:click="closePopUp('popUpConfirmDelete')">cancel</button>
