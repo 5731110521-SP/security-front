@@ -61,6 +61,27 @@
                 </div>
             </div>
         </div>
+        <div class="popupModal" id="popUpConfirmDelete"  >
+            <div class="popupBody headerThai" style="display:flex;justify-content:center;flex-direction:column;align-items:space-around;" >
+                Are you sure to delete this record ?
+                <div style="display:flex;justify-content:space-between;margin-top:40px;width:100%;flex-direction:row;">
+                    <div>SystemName :</div>
+                    <div>{{this.SystemName}}</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:30px;width:100%;flex-direction:row;">
+                    <div>FunctionName :</div>
+                    <div>{{this.FunctionName}}</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:30px;width:100%;flex-direction:row;">
+                    <div>Remarks :</div>
+                    <div>{{this.Remarks}}</div>
+                </div>
+                <div style="display:flex;justify-content:space-evenly;margin-top:30px">
+                    <button class="submitBtnInPopUp cancelBtn"  v-on:click="closePopUp('popUpConfirmDelete')">cancel</button>
+                    <button class="submitBtnInPopUp"  style="background:#C44536;" v-on:click="confirmDeleteApplicationProfile()">delete</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -86,6 +107,7 @@ export default {
         datavalue: "",
         searchBy: [],
         searchValue: '',
+        ID: "",
         searchOption: [
             {
             key: "SystemName",
@@ -187,19 +209,32 @@ export default {
             router.push({name:'manageConfigurationEdit', params:{ ID,SystemName,ConfigurationName,Value }});
         },
         deleteRecord(ID) {
+            this.ID = ID
+            this.showPopup("popUpConfirmDelete"); 
+        },
+        showPopup(popUpName) {
+            document.getElementById(popUpName).style.display = "flex";
+        },
+        closePopUp(popUpName) {
+            this.ID = ""
+            document.getElementById(popUpName).style.display = "none";
+        },
+        async confirmDeleteApplicationProfile() {
             var body = {
-                data:{id: ID}
-            }
-            this.$http
+                data:{id: this.ID}
+            } 
+            await this.$http
             .delete("security-config", body)
             .then(response => {
                 if (response.data == null) {
-                // this.responseForTable = [];
-                // this.datatotal = 0;
+
                 } else {
                     this.getTime()
                 }
             })
+            // await this.$http.delete("/function/" + this.ID);
+
+            this.closePopUp("popUpConfirmDelete");
         },
     }
 };
@@ -281,6 +316,39 @@ export default {
 
 .cursorP{
   cursor: pointer;
+}
+
+.headerThai {
+  font-family: "Kanit", sans-serif;
+}
+
+.popupModal {
+  background-color: rgba(0, 0, 0, 0.822);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.popupBody {
+  width: auto;
+  height: auto;
+  background: #ffffff;
+  border-radius: 5px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: space-around;
+  width: 40%;
+  height: auto;
+  font-size: 20px;
+  padding: 40px 70px 40px 70px;
 }
 </style>
 
