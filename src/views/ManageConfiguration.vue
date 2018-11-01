@@ -45,7 +45,7 @@
                         <td><i class="far fa-edit editHover" style="width:15px;height:15px;cursor:pointer" 
                         v-on:click="edit(data.id,data.sysname,data.configurationname,data.value)"></i></td>
                         <td><i class="fas fa-trash-alt deleteHover" style="width:15px;height:15px;cursor:pointer;" 
-                        v-on:click="deleteRecord(data.id)"></i></td>
+                        v-on:click="deleteRecord(data.id,data.sysname,data.configurationname,data.value)"></i></td>
                     </tr>
                 </tbody>
             </table>
@@ -66,15 +66,15 @@
                 Are you sure to delete this record ?
                 <div style="display:flex;justify-content:space-between;margin-top:40px;width:100%;flex-direction:row;">
                     <div>SystemName :</div>
-                    <div>{{this.sysname}}</div>
+                    <div>{{this.SYS}}</div>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-top:30px;width:100%;flex-direction:row;">
                     <div>ConfigurationName :</div>
-                    <div>{{this.configurationname}}</div>
+                    <div>{{this.CONFIG}}</div>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-top:30px;width:100%;flex-direction:row;">
                     <div>Value :</div>
-                    <div>{{this.datavalue}}</div>
+                    <div>{{this.VALUE}}</div>
                 </div>
                 <div style="display:flex;justify-content:space-evenly;margin-top:30px">
                     <button class="submitBtnInPopUp cancelBtn"  v-on:click="closePopUp('popUpConfirmDelete')">cancel</button>
@@ -108,6 +108,9 @@ export default {
         searchBy: [],
         searchValue: '',
         ID: "",
+        SYS: "",
+        CONFIG: "",
+        VALUE: "",
         searchOption: [
             {
             key: "SystemName",
@@ -208,8 +211,11 @@ export default {
         async edit(ID,SystemName,ConfigurationName,Value) {
             router.push({name:'manageConfigurationEdit', params:{ ID,SystemName,ConfigurationName,Value }});
         },
-        deleteRecord(ID) {
+        deleteRecord(ID,SystemName,ConfigurationName,Value) {
             this.ID = ID
+            this.SYS = SystemName
+            this.CONFIG = ConfigurationName
+            this.VALUE = Value
             this.showPopup("popUpConfirmDelete"); 
         },
         showPopup(popUpName) {
@@ -217,6 +223,9 @@ export default {
         },
         closePopUp(popUpName) {
             this.ID = ""
+            this.SYS = ""
+            this.CONFIG = ""
+            this.VALUE = ""
             document.getElementById(popUpName).style.display = "none";
         },
         async confirmDeleteApplicationProfile() {
