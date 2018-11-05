@@ -7,15 +7,15 @@
         </div>
         <ul>
             <li>
-                <router-link to="customerDataTracking" class="smallList">
+                <router-link :to="{name:'customerDataTracking'}" class="smallList" active-class="smallList bold">
                     Customer Data Tracking
                     <i class="fas fa-arrow-right"></i>
                 </router-link>
-                <router-link to="requestOTTracking" class="smallList">
+                <router-link :to="{name:'requestOTTracking'}" class="smallList" active-class="smallList bold">
                     Request OT Tracking Log
                     <i class="fas fa-arrow-right"></i>
                 </router-link>
-                <router-link to="manageConfiguration" class="smallList">
+                <router-link :to="{name:'manageConfiguration'}" class="smallList" active-class="smallList bold">
                     Manage Configuration
                     <i class="fas fa-arrow-right"></i>
                 </router-link>
@@ -68,5 +68,9 @@
   display: flex;
   padding-bottom: 10px;
   justify-content: space-between;
+  
+}
+.bold{
+    font-weight: bold;
 }
 </style>

@@ -86,7 +86,7 @@
                 this.$router.go(-1)
             },
             routerGo() {
-                this.$router.push('/ManageConfiguration')
+                this.$router.push('/manageConfiguration')
             }
         }
     }

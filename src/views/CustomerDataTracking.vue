@@ -9,8 +9,8 @@
                     for search customer data log .
                 </div>
             </div>
-            <sui-dropdown class="left_input" fluid multiple :options="searchOptions" placeholder="Search by..." selection
-                v-model="searchBy" />
+            <sui-dropdown class="left_input" fluid multiple :options="searchOptions" placeholder="Search by..."
+                selection v-model="searchBy" />
             <input class="right_input" v-model="searchValue" placeholder="search...">
             <button class="searchButton" @click="search">Search</button>
         </header>
@@ -38,7 +38,7 @@
                     <tbody>
                         <tr v-for="(item,index) in datalist" :key="index">
                             <td>{{(pageNumber-1)*pageSize+index+1}}</td>
-                            <td>{{item.createddate}}</td>
+                            <td>{{createddatereformat(item.createddate)}}</td>
                             <td>{{item.sysname}}</td>
                             <td>{{item.user}}</td>
                             <td>{{item.ipaddress}}</td>
@@ -123,11 +123,11 @@
                 ],
                 searchValue: '',
                 isLoading: true,
-                sort:{
-                    sysname:'',
-                    user:'',
-                    ipaddress:'',
-                    action:'',
+                sort: {
+                    sysname: '',
+                    user: '',
+                    ipaddress: '',
+                    action: '',
 
                 },
                 sortDirection: null,
@@ -197,28 +197,31 @@
                 if (this.pageNumber == 1) this.getData()
                 else this.pageNumber = 1
             },
-            sort_(id){
+            sort_(id) {
                 var value = this.sort[id]
-                this.sort.sysname=''
-                this.sortBy=id
-                if(value=='-up sortUpAnimation'){
-                    this.sort[id]= '-down sortDownAnimation'
+                this.sort.sysname = ''
+                this.sortBy = id
+                if (value == '-up sortUpAnimation') {
+                    this.sort[id] = '-down sortDownAnimation'
                     this.sortDirection = 'desc'
-                }else{
+                } else {
                     this.sort[id] = '-up sortUpAnimation'
                     this.sortDirection = 'asc'
                 }
                 this.getData()
+            },
+            createddatereformat(date) {
+                return date
             }
         },
     }
 </script>
 
-<style>
+<style scoped>
     .pagination {
         margin-top: 10px;
-        display: flex;
-        justify-content: flex-end;
+        display: inline-block;
+        align-content: center;
     }
 
     .pagination a {
@@ -254,12 +257,12 @@
         margin-top: 20px;
     }
 
-    .content .emptyState img{
+    .content .emptyState img {
         margin: 30px;
         height: 100px;
     }
 
-    .content .emptyState p{
+    .content .emptyState p {
         color: gainsboro;
         font-size: 18px;
     }

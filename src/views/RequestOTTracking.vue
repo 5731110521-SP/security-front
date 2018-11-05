@@ -170,7 +170,7 @@
     },
     computed: {
       responseForTableWithNo() {
-        if(this.responseForTable==null) return []
+        if (this.responseForTable == null) return []
         var tableWithNo = [];
         var memonum, currentMemonum = -1,
           currentStartIndex = -1,
@@ -277,16 +277,11 @@
   };
 </script>
 
-<style>
-  .no::before {
-    counter-increment: no;
-    content: counter(no);
-  }
-
+<style scoped>
   .pagination {
     margin-top: 10px;
-    display: flex;
-    justify-content: flex-end;
+    display: inline-block;
+    align-content: center;
   }
 
   .pagination a {

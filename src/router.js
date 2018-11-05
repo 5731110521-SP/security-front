@@ -19,28 +19,28 @@ export default new Router({
       component: Home
     },
     {
-      path: '/CustomerDataTracking',
+      path: '/customerDataTracking',
       name: 'customerDataTracking',
       component: CustomerDataTracking
     },
     {
-      path: '/RequestOTTracking',
+      path: '/requestOTTracking',
       name: 'requestOTTracking',
       component: RequestOTTracking
     },
     {
-      path: '/ManageConfiguration',
+      path: '/manageConfiguration',
       name: 'manageConfiguration',
-      component: ManageConfiguration
+      component: ManageConfiguration,
     },
     {
-      path: '/ManageConfigurationAdd',
+      path: '/manageConfiguration/add',
       name: 'manageConfigurationAdd',
       component: ManageConfigurationAdd,
       props: true
     },
     {
-      path: '/ManageConfigurationEdit',
+      path: '/manageConfiguration/edit',
       name: 'manageConfigurationEdit',
       component: ManageConfigurationAdd,
       props: true
